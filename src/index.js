@@ -21,9 +21,9 @@ const testCardClass = () => {
 
 const testDeck = () => {
     const deck = new Deck(6);
-    deck.shuffleDeck()
+    deck.shuffle()
 
-    console.log(`Count: ${deck.count()}`);
+    console.log(`Count: ${deck.getCount()}`);
     console.log('x'.repeat(50));
 
     for(let i = 0; i < 10; i++) {
@@ -31,7 +31,7 @@ const testDeck = () => {
         console.log(card.toString());
     }
 
-    console.log(`Count: ${deck.count()}`);
+    console.log(`Count: ${deck.getCount()}`);
     console.log('x'.repeat(50));
 
     while(!deck.isEmpty()) {
@@ -39,7 +39,7 @@ const testDeck = () => {
         console.log(card.toString());
     }
 
-    console.log(`Count: ${deck.count()}`);
+    console.log(`Count: ${deck.getCount()}`);
 }
 
 
