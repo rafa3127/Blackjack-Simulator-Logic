@@ -4,8 +4,10 @@
   "description": "Desarrollo de base de software de simulación del juego de naipes 21 Blackjack siguiendo el paradigma de Programación Orientada a Objetos y los principios SOLID",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node src/index.js"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rafa3127/Blackjack-Simulator-Logic.git"
