@@ -1,0 +1,24 @@
+{
+  "name": "blackjack-simulator-logic",
+  "version": "1.0.0",
+  "description": "Desarrollo de base de software de simulación del juego de naipes 21 Blackjack siguiendo el paradigma de Programación Orientada a Objetos y los principios SOLID",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafa3127/Blackjack-Simulator-Logic.git"
+  },
+  "keywords": [
+    "blackjack",
+    "OOP",
+    "SOLID"
+  ],
+  "author": "Rafael Correa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafa3127/Blackjack-Simulator-Logic/issues"
+  },
+  "homepage": "https://github.com/rafa3127/Blackjack-Simulator-Logic#readme"
+}
