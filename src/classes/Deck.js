@@ -39,8 +39,12 @@ export class Deck {
   }
 
   drawCard() {
-    return this.#deck.pop();
-  }
+    if(this.cards.length === 0) {
+        throw new Error("No cards left in the deck");
+    }
+    return this.cards.pop();
+}
+
 
   count() {
     return this.#deck.length;
