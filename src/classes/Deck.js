@@ -7,10 +7,10 @@ export class Deck {
 
   constructor(numberOfDecks = 1) {
     this.#numberOfDecks = numberOfDecks;
-    this.#deck = this.generateDeck();
+    this.#deck = this.#generateDeck();
   }
 
-  generateDeck() {
+  #generateDeck() {
     let deck = [];
     for (let i = 0; i < this.#numberOfDecks; i++) {
       for (let suit of SUITS) {
@@ -22,14 +22,14 @@ export class Deck {
     return deck;
   }
 
-  shuffleDeck() {
+  shuffle() {
     for (let i = this.#deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [this.#deck[i], this.#deck[j]] = [this.#deck[j], this.#deck[i]];
     }
   }
 
-  sortDeck() {
+  sort() {
     this.#deck.sort((a, b) => {
       if (SUITS.indexOf(a.getCardDetails().suit) - SUITS.indexOf(b.getCardDetails().suit) === 0) {
         return RANKS.indexOf(a.getCardDetails().rank) - RANKS.indexOf(b.getCardDetails().rank);
@@ -39,14 +39,13 @@ export class Deck {
   }
 
   drawCard() {
-    if(this.cards.length === 0) {
+    if(this.#deck.length === 0) {
         throw new Error("No cards left in the deck");
     }
-    return this.cards.pop();
-}
+    return this.#deck.pop();
+  }
 
-
-  count() {
+  getCount() {
     return this.#deck.length;
   }
 
