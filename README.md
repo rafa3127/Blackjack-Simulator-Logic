@@ -101,3 +101,48 @@ console.log(deck1.getCount());
 ```
 
 La clase Deck es una herramienta esencial en nuestro simulador de Blackjack, proporcionando un modelo realista de un mazo de cartas y las operaciones que se pueden realizar sobre él.
+
+## Clase `Hand`
+
+### Instanciación
+
+Para crear una nueva instancia de la clase `Hand`, simplemente se instancia sin necesidad de parámetros:
+
+```javascript
+let playerHand = new Hand();
+```
+
+### Métodos
+
+- `addCard(card: Card)`: Agrega una nueva carta al array interno `#cards` de la mano. 
+
+```javascript
+let newCard = deck.drawCard();  // Assuming 'deck' is an instance of Deck.
+playerHand.addCard(newCard);
+```
+
+- `calculateValue()`: Calcula el valor total de la mano teniendo en cuenta las reglas especiales del As en Blackjack (puede valer 1 u 11 dependiendo de la situación). Retorna un entero que representa el valor de la mano.
+
+```javascript
+let handValue = playerHand.calculateValue();
+```
+
+- `getCards()`: Retorna una copia del array interno `#cards` de la mano, cada carta es una instancia de la clase `Card`.
+
+```javascript
+let cardsInHand = playerHand.getCards();  // This is an array of Card instances.
+```
+
+- `getCardCount()`: Retorna el número de cartas en la mano actual.
+
+```javascript
+let cardCount = playerHand.getCardCount();
+```
+
+- `resetHand()`: Borra todas las cartas en la mano (útil para prepararse para una nueva ronda de juego).
+
+```javascript
+playerHand.resetHand();
+``` 
+
+Estos métodos permiten que se maneje una "mano" en el juego de Blackjack, proporcionando todas las funcionalidades necesarias para agregar cartas a la mano, calcular y obtener su valor, y limpiar la mano para una nueva ronda.
