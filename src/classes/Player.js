@@ -74,6 +74,9 @@ export class Player {
 
     updateBalance(result, handIndex) {
         switch (result) {
+            case 'blackjack':
+                this.#balance += this.#hands[handIndex].bet * 3;
+                break;
             case 'win':
                 this.#balance += this.#hands[handIndex].bet * 2;
                 break;
@@ -85,6 +88,7 @@ export class Player {
             default:
                 throw new Error('Invalid result');
         }
+        console.log(`new balance for ${this.#name}: ${this.#balance}`)
     }
 
 
@@ -93,7 +97,15 @@ export class Player {
     }
 
     isBlackjack(handIndex = 0) {
-        return this.#hands[handIndex].hand.isBlackjack;
+        return this.#hands[handIndex].hand.isBlackjack();
+    }
+
+    canSplit(handIndex = 0){
+        return this.#hands[handIndex].hand.canSplit()
+    }
+
+    canDoubleDown(handIndex = 0){
+        return this.#hands[handIndex].hand.getCards().length === 2
     }
 
     reset() {
