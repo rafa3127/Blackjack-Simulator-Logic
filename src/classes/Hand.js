@@ -53,4 +53,15 @@ export class Hand {
     resetHand() {
         this.#cards = [];
     }
+
+    canSplit() {
+        return this.#cards.length === 2 && this.#cards[0].getCardDetails().values.length === this.#cards[1].getCardDetails().values.length && this.#cards[0].getCardDetails().values[0] === this.#cards[1].getCardDetails().values[0]
+    }
+
+    isBlackjack() {
+        if(this.#cards.length !== 2) return false;
+        let values = this.#cards.map(card => card.getCardDetails().values[0]);  // Get main values of cards
+        return (values.includes(1) && values.includes(10));  // Check if it includes Ace (value 1) and any 10-value card
+    }
+
 }
