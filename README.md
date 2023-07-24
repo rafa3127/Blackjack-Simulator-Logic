@@ -3,221 +3,325 @@ Desarrollo de base de software de simulación del juego de naipes 21 Blackjack s
 
 ---
 
-# Clase Card
+# Card 
+La clase `Card` representa una carta individual en un juego de Blackjack. Cada carta tiene un rango, un palo, un color y valores asociados.
 
-La clase `Card` representa una carta individual de un mazo de cartas. Cada objeto `Card` tiene un palo, un rango y un color.
-
-## Instanciación
-
-Para crear una nueva instancia de `Card`, debes pasar dos argumentos al constructor: el rango y el palo. Los rangos y los palos válidos se pueden encontrar en las constantes `RANKS` y `SUITS`, respectivamente.
+### Instanciación:
+La forma de instanciar un objeto de la clase `Card` es la siguiente:
 
 ```javascript
-import Card from './classes/Card';
-const card = new Card('2', 'hearts');
+const card = new Card(rank, suit);
+```
+- `rank` (String): Es el rango de la carta (Ej: 'A', '2', '3', etc.)
+- `suit` (String): Es el palo de la carta (Ej: 'Hearts', 'Diamonds', 'Clubs', 'Spades')
+
+Los rangos y palos válidos se definen en las constantes `RANKS` y `SUITS` respectivamente. Si se proporciona un rango o un palo inválido, se lanzará un error.
+
+### Métodos:
+La clase `Card` tiene los siguientes métodos:
+
+- `getCardDetails()` - Este método no toma argumentos y devuelve un objeto con los detalles de la carta, incluyendo el rango, el palo, el color y los valores.
+
+- `toString()` - Este método no toma argumentos y devuelve una cadena de texto representando a la carta con el formato "Rango de Palo (Color)". 
+
+#### Ejemplo de Uso:
+
+```javascript
+// Instanciar una nueva carta
+const card = new Card('A', 'Spades');
+
+// Obtener detalles de la carta
+console.log(card.getCardDetails()); 
+// { rank: 'A', suit: 'Spades', color: 'black', values: [1, 11] }
+
+// Obtener la representación de la carta en cadena de texto
+console.log(card.toString()); 
+// 'A of Spades (black)'
 ```
 
-Si se pasa un rango o un palo no válido, se lanzará un error.
+# Deck 
+La clase `Deck` representa un mazo de cartas en un juego de Blackjack. Cada mazo está compuesto por varias cartas y puede contener múltiples mazos según se especifique.
 
-## Métodos
-
-### getCardDetails()
-
-Este método devuelve un objeto con los detalles de la carta, incluyendo el rango, el palo, el color y los posibles valores de la carta. Este método no toma ningún argumento.
+### Instanciación:
+La forma de instanciar un objeto de la clase `Deck` es la siguiente:
 
 ```javascript
-const details = card.getCardDetails();
-console.log(details);  // { rank: '2', suit: 'hearts', color: 'red', values: [2] }
+const deck = new Deck(numberOfDecks);
+```
+- `numberOfDecks` (Número): Es el número de mazos que se quiere tener en el mazo. Por defecto es 1.
+
+### Métodos:
+La clase `Deck` tiene los siguientes métodos:
+
+- `shuffle()` - Este método no toma argumentos y baraja las cartas en el mazo de manera aleatoria.
+
+- `sort()` - Este método no toma argumentos y ordena las cartas en el mazo por palo y rango.
+
+- `drawCard()` - Este método no toma argumentos y saca una carta del mazo. Lanza un error si el mazo está vacío.
+
+- `getCount()` - Este método no toma argumentos y devuelve el número de cartas restantes en el mazo.
+
+- `isEmpty()` - Este método no toma argumentos y devuelve `true` si el mazo está vacío, `false` en caso contrario.
+
+- `reset()` - Este método no toma argumentos y restablece el mazo a su estado inicial, generando nuevamente las cartas correspondientes al número de mazos especificado.
+
+#### Ejemplo de Uso:
+
+```javascript
+// Instanciar un nuevo mazo con dos mazos de cartas
+const deck = new Deck(2);
+
+// Barajar el mazo
+deck.shuffle();
+
+// Sacar una carta del mazo
+const card = deck.drawCard();
+
+// Obtener el número de cartas restantes
+console.log(deck.getCount()); 
+
+// Comprobar si el mazo está vacío
+console.log(deck.isEmpty()); 
+
+// Restablecer el mazo
+deck.reset();
 ```
 
-### toString()
+# Hand
+La clase `Hand` representa una mano de cartas en un juego de Blackjack. Cada mano está compuesta por un conjunto de cartas.
 
-Este método devuelve una representación de la carta como una cadena de texto. Esta cadena de texto incluye el rango, el palo y el color.
+### Instanciación:
+Para instanciar un objeto de la clase `Hand`, simplemente debe hacer lo siguiente:
 
 ```javascript
-console.log(card.toString());  // '2 of hearts (red)'
+const hand = new Hand();
 ```
 
----
+### Métodos:
+La clase `Hand` tiene los siguientes métodos:
 
-Espero que esto te ayude. Recuerda que es importante mantener la documentación actualizada conforme sigues desarrollando y modificando tu proyecto.
+- `addCard(card)` - Este método toma un objeto de tipo `Card` como argumento y lo agrega a la mano. Lanza un error si el argumento no es una instancia de `Card`.
 
-# Clase Deck (Mazo)
+- `calculateValue()` - Este método no toma argumentos y calcula el valor total de la mano, teniendo en cuenta que el As puede valer 1 o 11 dependiendo del total actual de la mano.
 
-La clase Deck permite simular un mazo de cartas para el juego de Blackjack. Puede manejar múltiples mazos y proporciona funcionalidades para barajar y sacar cartas.
+- `getCards()` - Este método no toma argumentos y devuelve una lista de todas las cartas en la mano.
 
-## Creación de un objeto Deck
+- `getCardCount()` - Este método no toma argumentos y devuelve el número total de cartas en la mano.
 
-Para crear un nuevo mazo de cartas, instanciamos la clase Deck. Podemos especificar cuántos mazos de 52 cartas queremos incluir. Si no se especifica un número, se asumirá que es 1.
+- `resetHand()` - Este método no toma argumentos y limpia todas las cartas de la mano.
+
+- `canSplit()` - Este método no toma argumentos y devuelve `true` si la mano se puede dividir (es decir, si tiene exactamente dos cartas del mismo valor), `false` en caso contrario.
+
+- `isBlackjack()` - Este método no toma argumentos y devuelve `true` si la mano es un Blackjack (es decir, si está compuesta por un As y una carta con valor 10), `false` en caso contrario.
+
+#### Ejemplo de Uso:
 
 ```javascript
-import { Deck } from './classes/Deck.js';
+// Instanciar una nueva mano
+const hand = new Hand();
 
-// Crea un mazo con un solo mazo de 52 cartas
-const deck1 = new Deck();
+// Añadir cartas a la mano
+const card1 = new Card('10', 'Hearts');
+const card2 = new Card('A', 'Spades');
+hand.addCard(card1);
+hand.addCard(card2);
 
-// Crea un mazo con 4 mazos de 52 cartas
-const deck2 = new Deck(4);
+// Calcular el valor de la mano
+console.log(hand.calculateValue()); 
+
+// Obtener las cartas en la mano
+console.log(hand.getCards());
+
+// Verificar si la mano puede ser dividida
+console.log(hand.canSplit()); 
+
+// Verificar si la mano es un Blackjack
+console.log(hand.isBlackjack()); 
+
+// Resetear la mano
+hand.resetHand();
 ```
 
-## Métodos de la clase Deck
+# Dealer
+La clase `Dealer` representa al crupier en un juego de Blackjack. Cada crupier tiene una mano de cartas, representada por una instancia de la clase `Hand`.
 
-La clase Deck proporciona los siguientes métodos:
-
-### shuffle()
-
-Baraja el mazo de cartas.
+### Instanciación:
+Para instanciar un objeto de la clase `Dealer`, simplemente debes hacer lo siguiente:
 
 ```javascript
-deck1.shuffle();
+const dealer = new Dealer();
 ```
 
-### sort()
+### Métodos:
+La clase `Dealer` tiene los siguientes métodos:
 
-Ordena el mazo de cartas por palo y rango.
+- `getHand()` - Este método no toma argumentos y devuelve la mano del crupier.
+
+- `addCard(card)` - Este método toma un objeto de tipo `Card` como argumento y lo agrega a la mano del crupier.
+
+- `draw(deck)` - Este método toma un objeto de tipo `Deck` como argumento y permite al crupier robar cartas del mazo hasta que el valor de su mano sea 17 o más.
+
+- `isBlackjack()` - Este método no toma argumentos y devuelve `true` si la mano del crupier es un Blackjack (es decir, un As y una carta con valor 10), `false` en caso contrario.
+
+- `isBusted()` - Este método no toma argumentos y devuelve `true` si el crupier se ha pasado de 21, `false` en caso contrario.
+
+- `hasPosibleBlackJack()` - Este método no toma argumentos y devuelve `true` si la primera carta del crupier tiene un valor de 10 o 11 y solo tiene una carta, `false` en caso contrario.
+
+- `reset()` - Este método no toma argumentos y resetea la mano del crupier, creando una nueva mano vacía.
+
+#### Ejemplo de Uso:
 
 ```javascript
-deck1.sort();
+// Instanciar un nuevo crupier
+const dealer = new Dealer();
+
+// Agregar cartas a la mano del crupier
+const card1 = new Card('10', 'Hearts');
+const card2 = new Card('A', 'Spades');
+dealer.addCard(card1);
+dealer.addCard(card2);
+
+// Verificar si el crupier tiene un Blackjack
+console.log(dealer.isBlackjack());
+
+// Verificar si el crupier se ha pasado de 21
+console.log(dealer.isBusted());
+
+// Verificar si la primera carta del crupier puede dar lugar a un posible Blackjack
+console.log(dealer.hasPosibleBlackJack());
+
+// Resetear la mano del crupier
+dealer.reset();
 ```
 
-### drawCard()
+# Player 
+La clase `Player` representa a un jugador en un juego de Blackjack. Cada jugador tiene un nombre, un saldo y una o más manos de cartas.
 
-Retira la última carta del mazo. Si el mazo está vacío, se lanzará un error.
+### Instanciación:
+Para crear una nueva instancia de la clase `Player`, necesitas proporcionar un nombre y un saldo inicial:
 
 ```javascript
-try {
-    const card = deck1.drawCard();
-    console.log(card.toString());
-} catch(error) {
-    console.error(error);
-}
+const player = new Player('John Doe', 1000);
 ```
 
-### getCount()
+### Métodos:
+La clase `Player` tiene los siguientes métodos:
 
-Devuelve la cantidad de cartas que quedan en el mazo.
+- `getName()` - Este método no toma argumentos y devuelve el nombre del jugador.
+
+- `getBalance()` - Este método no toma argumentos y devuelve el saldo actual del jugador.
+
+- `getHands()` - Este método no toma argumentos y devuelve todas las manos de cartas del jugador.
+
+- `placeBet(amount, handIndex = 0)` - Este método toma una cantidad a apostar y un índice de mano opcional (por defecto 0). El jugador coloca una apuesta de la cantidad especificada en la mano indicada.
+
+- `winBet(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y actualiza el saldo del jugador como si hubiera ganado la apuesta asociada a la mano.
+
+- `loseBet(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y actualiza la apuesta de la mano a 0.
+
+- `addCardToHand(card, handIndex = 0)` - Este método toma un objeto de tipo `Card` y un índice de mano opcional (por defecto 0). El jugador agrega la carta especificada a la mano indicada.
+
+- `splitHand(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0). Si es posible, el jugador divide la mano indicada en dos.
+
+- `doubleDown(card, handIndex = 0)` - Este método toma un objeto de tipo `Card` y un índice de mano opcional (por defecto 0). Si es posible, el jugador dobla su apuesta en la mano indicada y agrega la carta especificada a esa mano.
+
+- `updateBalance(result, handIndex)` - Este método toma un resultado ('blackjack', 'win', 'push', 'lose') y un índice de mano. Actualiza el saldo del jugador de acuerdo con el resultado de la mano.
+
+- `isBusted(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y devuelve `true` si la mano del jugador se ha pasado de 21, `false` en caso contrario.
+
+- `isBlackjack(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y devuelve `true` si la mano del jugador es un Blackjack, `false` en caso contrario.
+
+- `canSplit(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y devuelve `true` si la mano del jugador puede dividirse, `false` en caso contrario.
+
+- `canDoubleDown(handIndex = 0)` - Este método toma un índice de mano opcional (por defecto 0) y devuelve `true` si el jugador puede doblar su apuesta en la mano indicada, `false` en caso contrario.
+
+- `reset()` - Este método no toma argumentos y resetea todas las manos del jugador y las apuestas asociadas.
+
+#### Ejemplo de Uso:
 
 ```javascript
-console.log(deck1.getCount());
+// Crear un nuevo jugador
+const player = new Player('John Doe', 1000);
+
+// Colocar una apuesta
+player.placeBet(100);
+
+// Añadir una carta a la mano del jugador
+const card1 = new Card('10', 'Hearts');
+player.addCardToHand(card1);
+
+// Comprobar si el jugador puede doblar su apuesta
+console.log(player.canDoubleDown());
+
+// Duplicar la apuesta y añadir otra carta
+const card2 = new Card('A', 'Spades');
+player.doubleDown(card2);
+
+// Comprobar si el jugador tiene un Blackjack
+console.log(player.isBlackjack());
+
+// Resetear el jugador
+player.reset();
 ```
-
-La clase Deck es una herramienta esencial en nuestro simulador de Blackjack, proporcionando un modelo realista de un mazo de cartas y las operaciones que se pueden realizar sobre él.
-
-## Clase `Hand`
-
-### Instanciación
-
-Para crear una nueva instancia de la clase `Hand`, simplemente se instancia sin necesidad de parámetros:
+# Table
+La clase `Table` representa una mesa de Blackjack con un número determinado de mazos de cartas, jugadores y un crupier.
 
 ```javascript
-let playerHand = new Hand();
+export class Table {
+    #players;
+    #dealer;
+    #deck;
+    #cutPoint;
+    
+    constructor(numberOfDecks = 6) {
+        this.#players = Array(7).fill(null); // Representa 7 asientos en la mesa
+        this.#dealer = new Dealer();
+        this.#deck = new Deck(numberOfDecks);
+        this.#cutPoint = 0;
+    }
 ```
+En el constructor de la clase, se inicializan los jugadores (representados como un array de 7 elementos, donde cada elemento puede ser un jugador o `null` si el asiento está vacío), el crupier, el mazo de cartas, y el punto de corte del mazo.
 
-### Métodos
+A continuación, se detallan los métodos de la clase `Table`:
 
-- `addCard(card: Card)`: Agrega una nueva carta al array interno `#cards` de la mano. 
+- `addPlayer(player, seat)`: Añade un jugador en un asiento específico. Este método valida si el número de asiento es válido y si el asiento está vacío antes de agregar al jugador.
 
-```javascript
-let newCard = deck.drawCard();  // Assuming 'deck' is an instance of Deck.
-playerHand.addCard(newCard);
-```
+- `removePlayer(seat)`: Elimina a un jugador de un asiento específico. Este método valida si el número de asiento es válido antes de eliminar al jugador.
 
-- `calculateValue()`: Calcula el valor total de la mano teniendo en cuenta las reglas especiales del As en Blackjack (puede valer 1 u 11 dependiendo de la situación). Retorna un entero que representa el valor de la mano.
+- `getPlayers()`: Devuelve la lista de jugadores en la mesa.
 
-```javascript
-let handValue = playerHand.calculateValue();
-```
+- `getPlayersString()`: Devuelve una representación en string de los jugadores en la mesa.
 
-- `getCards()`: Retorna una copia del array interno `#cards` de la mano, cada carta es una instancia de la clase `Card`.
+- `getDealerHand()`: Devuelve la mano del crupier.
 
-```javascript
-let cardsInHand = playerHand.getCards();  // This is an array of Card instances.
-```
+- `getDeckCutPoint()`: Devuelve el punto de corte del mazo.
 
-- `getCardCount()`: Retorna el número de cartas en la mano actual.
+- `getDeck()`: Devuelve el mazo.
 
-```javascript
-let cardCount = playerHand.getCardCount();
-```
+- `getHandsByPlayer()`: Devuelve las manos de cada jugador.
 
-- `resetHand()`: Borra todas las cartas en la mano (útil para prepararse para una nueva ronda de juego).
+- `#checkDeckStatus()`: Verifica el estado del mazo. Se considera que el mazo necesita ser reiniciado si el número de cartas en el mazo es menor o igual al punto de corte.
 
-```javascript
-playerHand.resetHand();
-``` 
+- `#resetDeck()`: Reinicia el mazo. Este método reinicia el mazo, lo baraja, establece un nuevo punto de corte y quema la primera carta.
 
-Estos métodos permiten que se maneje una "mano" en el juego de Blackjack, proporcionando todas las funcionalidades necesarias para agregar cartas a la mano, calcular y obtener su valor, y limpiar la mano para una nueva ronda.
+- `#resetPlayersAndDealer()`: Reinicia a los jugadores y al crupier.
 
-# Clase Player 
-La clase `Player` representa a un jugador en el juego de Blackjack. 
+- `#setOneCardToAllHands()`: Reparte una carta a cada mano de cada jugador.
 
-Para instanciar un nuevo jugador, debes proporcionar dos argumentos: un nombre (cadena) y un saldo inicial (número). El constructor de la clase creará automáticamente una nueva mano vacía para el jugador y establecerá su apuesta a 0.
+- `restartRound()`: Reinicia la ronda. Este método verifica si es necesario reiniciar el mazo, reinicia al crupier y a los jugadores, y luego reparte las cartas iniciales.
 
-```javascript
-let player = new Player("John Doe", 100);
-```
+- `placeBet(playerIndex, bet)`: Coloca una apuesta para un jugador específico.
 
-Aquí está un desglose de los métodos disponibles en la clase `Player`:
+- `getRoundActivePlayers()`: Devuelve los jugadores activos en la ronda actual.
 
-- `getName()`: Este método no toma ningún argumento y devuelve el nombre del jugador.
+- `initialDeal()`: Reparte las cartas iniciales.
 
-- `getBalance()`: Este método no toma ningún argumento y devuelve el saldo actual del jugador.
+- `#checkForBlackjacks()`: Verifica si hay Blackjacks en las manos de los jugadores.
 
-- `getHands()`: Este método no toma ningún argumento y devuelve un array con las manos del jugador. Cada mano es un objeto que contiene la mano (`hand`) y la apuesta asociada (`bet`).
+- `playPlayerTurn(player, action, handIndex = 0)`: Juega el turno de un jugador en función de la acción proporcionada (`addCard`, `split`, `doubleDown` o `keep`).
 
-- `placeBet(amount, handIndex = 0)`: Este método toma un monto de apuesta y un índice de mano opcional. Deduce el monto de la apuesta del saldo del jugador y asocia la apuesta con la mano.
+- `playDealerTurn()`: Juega el turno del crupier.
 
-- `winBet(handIndex = 0)`: Este método toma un índice de mano opcional y duplica la apuesta asociada con la mano seleccionada, añadiendo el resultado al saldo del jugador.
+- `compareHands()`: Compara las manos de los jugadores con la mano del crupier y actualiza las apuestas en función de si el jugador gana, pierde o empata.
 
-- `loseBet(handIndex = 0)`: Este método toma un índice de mano opcional y reinicia la apuesta asociada con la mano seleccionada a 0.
-
-- `addCardToHand(card, handIndex = 0)`: Este método toma una carta y un índice de mano opcional. Añade la carta a la mano seleccionada.
-
-- `splitHand(handIndex = 0)`: Este método toma un índice de mano opcional y divide la mano seleccionada en dos, si es posible.
-
-- `doubleDown(card, handIndex = 0)`: Este método toma una carta y un índice de mano opcional. Duplica la apuesta del jugador y añade una carta a la mano seleccionada.
-
-- `updateBalance(result, handIndex)`: Este método toma un resultado ('win', 'push' o 'lose') y un índice de mano opcional. Actualiza el saldo del jugador en función del resultado.
-
-- `isBusted(handIndex = 0)`: Este método toma un índice de mano opcional y comprueba si la mano seleccionada se ha pasado de 21.
-
-- `isBlackJack(handIndex = 0)`: Este método toma un índice de mano opcional y comprueba si la mano seleccionada tiene BlackJack.
-
-- `reset()`: Este método no toma ningún argumento y reinicia las manos del jugador a una mano vacía y establece su apuesta a 0.
-
-# Clase Dealer
-
-La clase Dealer representa al crupier en el juego de Blackjack.
-
-## Instanciación
-
-Un Dealer se instancia de la siguiente forma:
-
-```javascript
-let dealer = new Dealer();
-```
-
-## Métodos
-
-### getHand()
-
-Este método devuelve la mano del Dealer.
-
-### addCard(card)
-
-Este método agrega una carta a la mano del Dealer.
-
-### play(deck)
-
-Este método simula el turno del Dealer. Continuará pidiendo cartas del mazo proporcionado hasta que el valor de su mano sea de 17 o más.
-
-### isBlackjack()
-
-Este método verifica si la mano del Dealer es un Blackjack (una mano que suma 21 con sólo dos cartas).
-
-### isBusted()
-
-Este método verifica si la mano del Dealer se ha pasado de 21.
-
-### reset()
-
-Este método restablece la mano del Dealer a una mano vacía.
+Por último, es importante notar que los métodos precedidos por `#` son métodos privados, lo que significa que no se pueden acceder ni utilizar fuera de la clase `Table`. Estos métodos generalmente se utilizan para realizar operaciones internas dentro de la clase.
