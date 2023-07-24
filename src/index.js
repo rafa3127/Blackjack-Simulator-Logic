@@ -3,15 +3,115 @@ import { Dealer } from './classes/Dealer.js';
 import { Deck } from './classes/Deck.js';
 import { Hand } from './classes/Hand.js';
 import { Player } from './classes/Player.js';
+import { Table } from './classes/Table.js';
 import { RANKS, SUITS } from './constants.js';
+import * as readline from 'readline'
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
 
 const main = () => {
     // testCard()
     // testDeck()
     // testHand()
-    testPlayer()
-
+    // testPlayerAndDealer()
+    testTable()
+    
 }
+
+function question(rl, query) {
+    return new Promise((resolve) => {
+        rl.question(query, (answer) => {
+            resolve(answer);
+        });
+    });
+}
+
+
+const testTable = async () => {
+    const table = new Table();
+    const player1 = new Player("Rafa", 1000);
+    const player2 = new Player("Mami", 1000);
+    // const player3 = new Player("Rafael3", 1000);
+    // const player4 = new Player("Rafael4", 1000);
+    // const player5 = new Player("Rafael5", 1000);
+
+    table.addPlayer(player1, 1);
+    table.addPlayer(player2, 2);
+    // table.addPlayer(player3, 3);
+    // table.addPlayer(player4, 4);
+    // table.addPlayer(player5, 5);
+
+    // table.getPlayersString().map(player => console.log(player));
+    // table.removePlayer(4);
+    // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    // table.getPlayersString().map(player => console.log(player));
+    // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+    while(true) {
+        table.restartRound();
+    
+        table.placeBet(0, 10);
+        table.placeBet(1, 15);
+        // table.placeBet(4, 25);
+    
+        table.initialDeal();
+        
+        table.getRoundActivePlayers().forEach( player => {
+            console.log( player.getName() );
+            player.getHands().forEach( (hand, handIndex) => {
+                console.log(`Mano ${handIndex + 1}`);
+                console.log(hand.bet);
+                console.log(hand.hand.getCards().map( card => card.toString()));
+            });
+        });
+    
+        for(let player of table.getRoundActivePlayers()){
+            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+            console.log(`turno del jugador ${player.getName()}`);
+            let i = 0
+            while(i < player.getHands().length){
+                console.log(`carta del dealer ${table.getDealerHand().getCards().map(card => card.toString())}`)
+                console.log(`cartas: ${player.getHands()[i].hand.getCards().map(card => card.toString())}`)
+                console.log(`cuenta: ${player.getHands()[i].hand.calculateValue()}`)
+                if(player.isBusted(i)){i++; continue}
+                console.log('Acciones posibles');
+                if(!player.isBusted(i)){console.log('Pedir carta, 1')}
+                if(!player.isBusted(i)){console.log('Mantener, 2')}
+                if(player.canSplit(i)){console.log('Picar mano, 3')}
+                if(player.canDoubleDown(i)){console.log('Doblar mano, 4')}
+                const answer = await question(rl, 'Escribe el número de la opción: ');
+                let action = 'keep';
+                if(answer == '1'){action = 'addCard'}
+                if(answer == '2'){action = 'keep'}
+                if(answer == '3'){action = 'split'}
+                if(answer == '4'){action = 'doubleDown'}
+                table.playPlayerTurn(player, action, i);
+                if(action === 'keep'){i++}
+            }
+        }
+        //turno del dealer
+        table.playDealerTurn()
+        console.log('Mano del dealer')
+        console.log(table.getDealerHand().getCards().map( card => card.toString()))
+    
+        //resultados
+        table.compareHands()
+        
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        console.log('Nuevos Balances')
+        table.getPlayers().forEach( player => {
+            if(player !== null){
+                console.log(player.getName())
+                console.log(player.getBalance())
+            }
+        })
+    }
+    
+};
+
 
 
 const testCard = () => {
@@ -23,7 +123,7 @@ const testCard = () => {
       });
     });
 }
-
+  
 const testDeck = () => {
     const deck = new Deck(6);
     deck.shuffle()
@@ -115,7 +215,7 @@ const testHand = () => {
     }
 }
 
-const testPlayer = () => {
+const testPlayerAndDealer = () => {
     // Creación de jugadores, mazo y repartición inicial
     let player1 = new Player('Pedro',100);
     let player2 = new Player('Juana',100);

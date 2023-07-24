@@ -52,4 +52,8 @@ export class Deck {
   isEmpty() {
     return this.#deck.length === 0;
   }
+
+  reset() {
+    this.#generateDeck()
+  }
 }
